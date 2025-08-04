@@ -41,7 +41,7 @@ ticket_id <- get_new_ticket("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234")
 print(ticket_id)
 ```
 
-    ## [1] "YRVUBWDP8CCJ0TEWK5Q41YJVGUS7EGBR"
+    ## [1] "Q068MC72NZACE2APL955GV9W3VEFBVOD"
 
 ## Step 2: Request the Dataset
 
@@ -60,12 +60,12 @@ print(head(data))
     ## # A tibble: 6 × 2
     ##   treatment outcome
     ##   <lgl>       <dbl>
-    ## 1 TRUE        2.18 
-    ## 2 FALSE       1.02 
-    ## 3 TRUE        2.21 
-    ## 4 TRUE        1.46 
-    ## 5 FALSE       0.721
-    ## 6 TRUE        1.56
+    ## 1 TRUE       -1.15 
+    ## 2 FALSE       0.101
+    ## 3 FALSE       0.721
+    ## 4 TRUE        1.76 
+    ## 5 TRUE        2.26 
+    ## 6 FALSE       2.17
 
 ## Step 3: Run your Algorithm
 
@@ -84,7 +84,7 @@ estimate
 ```
 
     ## treatmentTRUE 
-    ##      1.097703
+    ##    -0.8096168
 
 # Step 4: Submit your results
 
@@ -101,4 +101,7 @@ a task!
 submit_estimate(ticket_id, estimate)
 ```
 
-    ## [1] "mse 0.0020351359131299644"
+    ## # A tibble: 1 × 7
+    ##   estimate ground_truth     mse total_mse time_s ci_lo ci_hi
+    ##      <dbl>        <dbl>   <dbl>     <dbl>  <dbl> <lgl> <lgl>
+    ## 1   -0.810       -0.877 0.00451   0.00451  0.189 NA    NA

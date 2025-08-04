@@ -10,7 +10,8 @@
 #'  
 #' @return 
 #' 
-#' @importFrom httr2 request req_perform req_method req_body_json resp_body_string
+#' @importFrom httr2 request req_perform req_method resp_body_json req_body_json
+#' @importFrom tibble tibble
 #' 
 #' 
 #' @export
@@ -23,6 +24,28 @@ submit_estimate <- function(ticket_id, estimate, ci_lo = NULL, ci_hi = NULL) {
       list(estimate = list(estimate))
     )
   
-  req_perform(estimate_req) |>
-    resp_body_string()
+  resp_data <- req_perform(estimate_req) |>
+    resp_body_json()
+  
+  out <- tibble(
+    estimate = as.numeric(resp_data$estimate),
+    ground_truth = as.numeric(resp_data$ground_truth),
+    mse = as.numeric(resp_data$mse),
+    total_mse = as.numeric(resp_data$total_mse),
+    time_s = as.numeric(resp_data$time_s)
+  )
+  
+  if (is.null(resp_data$ci_lo)) {
+    out$ci_lo <- NA
+    out$ci_hi <- NA
+  } else {
+    out$ci_lo <- as.numeric(resp_data$ci_lo)
+    out$ci_hi <- as.numeric(resp_data$ci_hi)
+  }
+  
+  out
+  
 }
+
+
+

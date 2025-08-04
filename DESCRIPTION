@@ -11,5 +11,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports: 
     httr2,
-    readr
+    readr,
+    tibble
 URL: https://pkg.causalbenchmarks.org
