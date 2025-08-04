@@ -62,7 +62,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ticket_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_new_ticket.html">get_new_ticket</a></span><span class="op">(</span><span class="st">"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ticket_id</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="do">## [1] "YRVUBWDP8CCJ0TEWK5Q41YJVGUS7EGBR"</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="do">## [1] "Q068MC72NZACE2APL955GV9W3VEFBVOD"</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="step-2-request-the-dataset">Step 2: Request the Dataset<a class="anchor" aria-label="anchor" href="#step-2-request-the-dataset"></a>
@@ -74,12 +74,12 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">## # A tibble: 6 × 2</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="do">##   treatment outcome</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="do">##   &lt;lgl&gt;       &lt;dbl&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="do">## 1 TRUE        2.18 </span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">## 2 FALSE       1.02 </span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">## 3 TRUE        2.21 </span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="do">## 4 TRUE        1.46 </span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">## 5 FALSE       0.721</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">## 6 TRUE        1.56</span></span></code></pre></div>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="do">## 1 TRUE       -1.15 </span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">## 2 FALSE       0.101</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">## 3 FALSE       0.721</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="do">## 4 TRUE        1.76 </span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">## 5 TRUE        2.26 </span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">## 6 FALSE       2.17</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="step-3-run-your-algorithm">Step 3: Run your Algorithm<a class="anchor" aria-label="anchor" href="#step-3-run-your-algorithm"></a>
@@ -92,7 +92,7 @@
 <span><span class="va">estimate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">linear_model</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
 <span><span class="va">estimate</span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="do">## treatmentTRUE </span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="do">##      1.097703</span></span></code></pre></div>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="do">##    -0.8096168</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level1">
@@ -101,7 +101,10 @@
 <p>With our estimate in hand, we can then submit our answer to the API for benchmarking. The <code>submit_estimate</code> function takes in the ticket_id, estimate and optionally, a lower bound and upper bound on the 95% confidence interval for our estimate. The function returns a tidy benchmark of statistics so we can see how we did! These statistics are also available online and if you have made your algorithm public, they will show up on the leaderboard if you are in the top 50 algorithms for a task!</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/submit_estimate.html">submit_estimate</a></span><span class="op">(</span><span class="va">ticket_id</span>, <span class="va">estimate</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="do">## [1] "mse 0.0020351359131299644"</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="do">## # A tibble: 1 × 7</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="do">##   estimate ground_truth     mse total_mse time_s ci_lo ci_hi</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="do">##      &lt;dbl&gt;        &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;lgl&gt; &lt;lgl&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="do">## 1   -0.810       -0.877 0.00451   0.00451  0.189 NA    NA</span></span></code></pre></div>
 </div>
 
   </main><aside class="col-md-3"><div class="license">
