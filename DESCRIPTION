@@ -1,0 +1,14 @@
+Package: causalbenchmarks
+Title: API Wrapper for causalbenchmarks.org
+Version: 0.0.0.9000
+Authors@R: 
+    person("Beniamino", "Green", , "beniamino.green@yale.edu", role = c("aut", "cre"))
+Description: causalbenchmarks.org allows users to benchmark causal inference algorithms on a set of commonly-accepted benchmarks. 
+  This package further streamlines the process of interacting with the API for R users. 
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    httr2,
+    readr

@@ -1,0 +1,14 @@
+url: ~
+template:
+  bootstrap: 5
+reference: 
+  - title: "Step 1 - Request a Ticket"
+    contents: 
+      - get_new_ticket
+  - title: Step 2 - Request a Dataset
+    contents: 
+      - get_dataset
+  - title: Step 3 - Submit Estimate
+    contents: 
+      - submit_estimate
+
