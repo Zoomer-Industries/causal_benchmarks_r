@@ -12,4 +12,4 @@ RoxygenNote: 7.3.2
 Imports: 
     httr2,
     readr
-URL: https://zoomer-industries.github.io/causal_benchmarks_r/
+URL: https://pkg.causalbenchmarks.org
