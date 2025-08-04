@@ -45,22 +45,65 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="react--vite">React + Vite<a class="anchor" aria-label="anchor" href="#react--vite"></a>
+<div class="page-header"><h1 id="causal-benchmarks-api-wrapper">Causal Benchmarks API Wrapper<a class="anchor" aria-label="anchor" href="#causal-benchmarks-api-wrapper"></a>
 </h1></div>
-<p>This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.</p>
-<p>Currently, two official plugins are available:</p>
-<ul>
-<li>
-<a href="https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react" class="external-link">@vitejs/plugin-react</a> uses <a href="https://babeljs.io/" class="external-link">Babel</a> for Fast Refresh</li>
-<li>
-<a href="https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc" class="external-link">@vitejs/plugin-react-swc</a> uses <a href="https://swc.rs/" class="external-link">SWC</a> for Fast Refresh</li>
-</ul>
+<p><code>causalbenchmarks</code> is an R package that provides convenient functions to interface with the <a href="https://causalbenchmarks.org" class="external-link">causalbenchmarks.org</a> API.</p>
 <div class="section level2">
-<h2 id="expanding-the-eslint-configuration">Expanding the ESLint configuration<a class="anchor" aria-label="anchor" href="#expanding-the-eslint-configuration"></a>
+<h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
 </h2>
-<p>If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the <a href="https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts" class="external-link">TS template</a> for information on how to integrate TypeScript and <a href="https://typescript-eslint.io" class="external-link"><code>typescript-eslint</code></a> in your project. # causal_benchmarks_frontend # causal_benchmarks_r</p>
+<p>To begin using the package, you will need to have an algorithm key, which you can obtain from the <a href="https://causalbenchmarks.org/dashboard" class="external-link">causalbenchmarks dashboard</a>. An algorithm key is an API key specific to an individual causal inference algorithm and is used to request new data analysis tasks. Like other API keys, it should not be shared publicly.</p>
+<p>If you are unsure whether you would like to make an account, or just would like to experiment with the package, you can also use the testing algorithm key, <code>ABCDEFGHIJKLMNOPQRSTUVWXYZ1234</code>. This is a special algorithm for the <code>rct_100</code> task which will never show up on the leaderboards, but it will allow you to experiment with the API. You can check out some details about the test algorithm <a href="https://causalbenchmarks.org/algorithm/TEST_ALGORITHM" class="external-link">here</a></p>
+</div>
+<div class="section level2">
+<h2 id="step-1-request-a-new-ticket">Step 1: Request a New Ticket<a class="anchor" aria-label="anchor" href="#step-1-request-a-new-ticket"></a>
+</h2>
+<p>Once you have your algorithm key, you can request a data analysis ticket. A ticket is a unique identifier associated with a simulation, and provides a way to request a dataset and submit the results of your analysis once your algorithm has run. To request a ticket, we use the <code>get_new_ticket</code> function which returns a new ticket for the algorithm associated with the submitted algorithm key.</p>
+<p>If we print out the ticket id, we see it is another 30-character identifier, just like the algorithm key. However, this key is specific to this simulation, and will only be used to request a dataset and submit the analysis.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ticket_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_new_ticket.html">get_new_ticket</a></span><span class="op">(</span><span class="st">"ABCDEFGHIJKLMNOPQRSTUVWXYZ1234"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ticket_id</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="do">## [1] "YRVUBWDP8CCJ0TEWK5Q41YJVGUS7EGBR"</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="step-2-request-the-dataset">Step 2: Request the Dataset<a class="anchor" aria-label="anchor" href="#step-2-request-the-dataset"></a>
+</h2>
+<p>Now that we have a new data analysis ticket, we can ask for a dataset and begin our analysis using the <code>get_dataset</code> function in conjunction with the ticket identifier. Because submissions to <a href="https://causalbenchmarks" class="external-link">causalbenchmarks.org</a> are timed, requesting this dataset starts a timer which is stopped when we submit our answer to the data analysis task.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_dataset.html">get_dataset</a></span><span class="op">(</span><span class="va">ticket_id</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">## # A tibble: 6 × 2</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="do">##   treatment outcome</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="do">##   &lt;lgl&gt;       &lt;dbl&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="do">## 1 TRUE        2.18 </span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">## 2 FALSE       1.02 </span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">## 3 TRUE        2.21 </span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="do">## 4 TRUE        1.46 </span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">## 5 FALSE       0.721</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">## 6 TRUE        1.56</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="step-3-run-your-algorithm">Step 3: Run your Algorithm<a class="anchor" aria-label="anchor" href="#step-3-run-your-algorithm"></a>
+</h2>
+<p>Once we have the dataset, we can run our analysis. In this case, we are going to use linear regression to estimate the difference in group means and come up with standard errors for our treatment effect estimates using the <code>lm</code> function. In practice, you would perform your own data analysis here with your own algorithm.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># estimate treatment effect via difference in group means</span></span>
+<span><span class="va">linear_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">outcome</span><span class="op">~</span><span class="va">treatment</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span> </span>
+<span><span class="co"># extract our answer from the models' coefficients</span></span>
+<span><span class="va">estimate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">linear_model</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
+<span><span class="va">estimate</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="do">## treatmentTRUE </span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="do">##      1.097703</span></span></code></pre></div>
 </div>
 </div>
+<div class="section level1">
+<h1 id="step-4-submit-your-results">Step 4: Submit your results<a class="anchor" aria-label="anchor" href="#step-4-submit-your-results"></a>
+</h1>
+<p>With our estimate in hand, we can then submit our answer to the API for benchmarking. The <code>submit_estimate</code> function takes in the ticket_id, estimate and optionally, a lower bound and upper bound on the 95% confidence interval for our estimate. The function returns a tidy benchmark of statistics so we can see how we did! These statistics are also available online and if you have made your algorithm public, they will show up on the leaderboard if you are in the top 50 algorithms for a task!</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/submit_estimate.html">submit_estimate</a></span><span class="op">(</span><span class="va">ticket_id</span>, <span class="va">estimate</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="do">## [1] "mse 0.0020351359131299644"</span></span></code></pre></div>
+</div>
+
   </main><aside class="col-md-3"><div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
