@@ -1,14 +1,104 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Causal Benchmarks API Wrapper
 
-Currently, two official plugins are available:
+`causalbenchmarks` is an R package that provides convenient functions to
+interface with the [causalbenchmarks.org](https://causalbenchmarks.org)
+API.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting started
 
-## Expanding the ESLint configuration
+To begin using the package, you will need to have an algorithm key,
+which you can obtain from the [causalbenchmarks
+dashboard](https://causalbenchmarks.org/dashboard). An algorithm key is
+an API key specific to an individual causal inference algorithm and is
+used to request new data analysis tasks. Like other API keys, it should
+not be shared publicly.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# causal_benchmarks_frontend
-# causal_benchmarks_r
+If you are unsure whether you would like to make an account, or just
+would like to experiment with the package, you can also use the testing
+algorithm key, `ABCDEFGHIJKLMNOPQRSTUVWXYZ1234`. This is a special
+algorithm for the `rct_100` task which will never show up on the
+leaderboards, but it will allow you to experiment with the API. You can
+check out some details about the test algorithm
+[here](https://causalbenchmarks.org/algorithm/TEST_ALGORITHM)
+
+## Step 1: Request a New Ticket
+
+Once you have your algorithm key, you can request a data analysis
+ticket. A ticket is a unique identifier associated with a simulation,
+and provides a way to request a dataset and submit the results of your
+analysis once your algorithm has run. To request a ticket, we use the
+`get_new_ticket` function which returns a new ticket for the algorithm
+associated with the submitted algorithm key.
+
+If we print out the ticket id, we see it is another 30-character
+identifier, just like the algorithm key. However, this key is specific
+to this simulation, and will only be used to request a dataset and
+submit the analysis.
+
+``` r
+ticket_id <- get_new_ticket("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234")
+print(ticket_id)
+```
+
+    ## [1] "YRVUBWDP8CCJ0TEWK5Q41YJVGUS7EGBR"
+
+## Step 2: Request the Dataset
+
+Now that we have a new data analysis ticket, we can ask for a dataset
+and begin our analysis using the `get_dataset` function in conjunction
+with the ticket identifier. Because submissions to
+[causalbenchmarks.org](https://causalbenchmarks) are timed, requesting
+this dataset starts a timer which is stopped when we submit our answer
+to the data analysis task.
+
+``` r
+data <- get_dataset(ticket_id)
+print(head(data))
+```
+
+    ## # A tibble: 6 × 2
+    ##   treatment outcome
+    ##   <lgl>       <dbl>
+    ## 1 TRUE        2.18 
+    ## 2 FALSE       1.02 
+    ## 3 TRUE        2.21 
+    ## 4 TRUE        1.46 
+    ## 5 FALSE       0.721
+    ## 6 TRUE        1.56
+
+## Step 3: Run your Algorithm
+
+Once we have the dataset, we can run our analysis. In this case, we are
+going to use linear regression to estimate the difference in group means
+and come up with standard errors for our treatment effect estimates
+using the `lm` function. In practice, you would perform your own data
+analysis here with your own algorithm.
+
+``` r
+# estimate treatment effect via difference in group means
+linear_model <- lm(outcome~treatment, data = data) 
+# extract our answer from the models' coefficients
+estimate <- coef(linear_model)[2]
+estimate
+```
+
+    ## treatmentTRUE 
+    ##      1.097703
+
+# Step 4: Submit your results
+
+With our estimate in hand, we can then submit our answer to the API for
+benchmarking. The `submit_estimate` function takes in the ticket_id,
+estimate and optionally, a lower bound and upper bound on the 95%
+confidence interval for our estimate. The function returns a tidy
+benchmark of statistics so we can see how we did! These statistics are
+also available online and if you have made your algorithm public, they
+will show up on the leaderboard if you are in the top 50 algorithms for
+a task!
+
+``` r
+submit_estimate(ticket_id, estimate)
+```
+
+    ## [1] "mse 0.0020351359131299644"
