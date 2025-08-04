@@ -21,5 +21,6 @@ get_dataset <- function(ticket_id) {
     req_method("POST") |>
     req_perform()
   
-  dataset <- read_csv(resp_body_raw(csv_resp))
+  dataset <- read_csv(resp_body_raw(csv_resp), show_col_types = FALSE)
+  dataset 
 }
