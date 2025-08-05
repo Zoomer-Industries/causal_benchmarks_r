@@ -41,7 +41,7 @@ ticket_id <- get_new_ticket("ABCDEFGHIJKLMNOPQRSTUVWXYZ1234")
 print(ticket_id)
 ```
 
-    ## [1] "Q068MC72NZACE2APL955GV9W3VEFBVOD"
+    ## [1] "ATHJ55MJA71DXZ2DCVKUJJB2S6P5F7IN"
 
 ## Step 2: Request the Dataset
 
@@ -60,12 +60,12 @@ print(head(data))
     ## # A tibble: 6 × 2
     ##   treatment outcome
     ##   <lgl>       <dbl>
-    ## 1 TRUE       -1.15 
-    ## 2 FALSE       0.101
-    ## 3 FALSE       0.721
-    ## 4 TRUE        1.76 
-    ## 5 TRUE        2.26 
-    ## 6 FALSE       2.17
+    ## 1 TRUE        2.38 
+    ## 2 TRUE        2.27 
+    ## 3 FALSE       0.356
+    ## 4 TRUE        3.13 
+    ## 5 FALSE       1.11 
+    ## 6 FALSE       2.76
 
 ## Step 3: Run your Algorithm
 
@@ -84,7 +84,7 @@ estimate
 ```
 
     ## treatmentTRUE 
-    ##    -0.8096168
+    ##     0.4829739
 
 # Step 4: Submit your results
 
@@ -98,10 +98,11 @@ will show up on the leaderboard if you are in the top 50 algorithms for
 a task!
 
 ``` r
-submit_estimate(ticket_id, estimate)
+# Optional: also include ci_lo and ci_hi to get coverage statistics (in this case our CI is [-20,20])
+submit_estimate(ticket_id, estimate, -20.0, 20.0)
 ```
 
-    ## # A tibble: 1 × 7
-    ##   estimate ground_truth     mse total_mse time_s ci_lo ci_hi
-    ##      <dbl>        <dbl>   <dbl>     <dbl>  <dbl> <lgl> <lgl>
-    ## 1   -0.810       -0.877 0.00451   0.00451  0.189 NA    NA
+    ## # A tibble: 1 × 8
+    ##   estimate ground_truth     mse total_mse time_s ci_lo ci_hi coverage_rate
+    ##      <dbl>        <dbl>   <dbl>     <dbl>  <dbl> <dbl> <dbl>         <dbl>
+    ## 1    0.483        0.439 0.00196   0.00196  0.165   -20    20             1

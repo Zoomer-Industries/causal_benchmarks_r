@@ -18,10 +18,17 @@
 submit_estimate <- function(ticket_id, estimate, ci_lo = NULL, ci_hi = NULL) {
   answer_endpoint <- paste0(get_base_url(), "submit/", ticket_id)
   
+  data <- list(estimate = list(estimate)) 
+  
+  if (!is.null(ci_lo) && !is.null(ci_hi)) { 
+    data$ci_lo = list(ci_lo)
+    data$ci_hi = list(ci_hi)
+  }
+
   estimate_req <- request(answer_endpoint) |>
     req_method("POST") |>
     req_body_json(
-      list(estimate = list(estimate))
+      data
     )
   
   resp_data <- req_perform(estimate_req) |>
@@ -41,6 +48,7 @@ submit_estimate <- function(ticket_id, estimate, ci_lo = NULL, ci_hi = NULL) {
   } else {
     out$ci_lo <- as.numeric(resp_data$ci_lo)
     out$ci_hi <- as.numeric(resp_data$ci_hi)
+    out$coverage_rate <- as.numeric(resp_data$coverage_rate)
   }
   
   out

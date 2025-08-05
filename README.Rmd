@@ -80,8 +80,10 @@ benchmarking. The `submit_estimate` function takes in the ticket_id, estimate
 and optionally, a lower bound and upper bound on the 95% confidence interval 
 for our estimate. The function returns a tidy benchmark of
 statistics so we can see how we did! These statistics are also
-available online and if you have made your algorithm public, they will show up on the leaderboard if you are in the top 50 algorithms for a task!
+available online and if you have made your algorithm public, 
+they will show up on the leaderboard if you are in the top 50 algorithms for a task!
 
 ```{r}
-submit_estimate(ticket_id, estimate)
+# Optional: also include ci_lo and ci_hi to get coverage statistics (in this case our CI is [-20,20])
+submit_estimate(ticket_id, estimate, -20.0, 20.0)
 ```
